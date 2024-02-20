@@ -1,0 +1,137 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Notifications Disabler</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #36393f;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        form {
+            max-width: 400px;
+            width: 100%;
+            background-color: #202225;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        .btn-primary {
+            background-color: #7289da;
+            border-color: #4e5d94;
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            margin-top: 1.5rem;
+        }
+        .btn-primary:hover {
+            background-color: #677bc4;
+            border-color: #4e5d94;
+        }
+        input {
+            color: #ffffff;
+            background-color: #2f3136;
+            border: 1px solid #23272a;
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            border-radius: 5px;
+        }
+
+        input:focus {
+            border-color: #7289da;
+            background-color: #36393f;
+        }
+
+        label {
+            color: #7289da;
+            margin-top: 1rem;
+            display: block;
+            font-size: 1.2rem;
+        }
+        .invalid-feedback {
+            color: #d9534f;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+        h1 {
+            color: #7289da;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .message {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 1.2rem;
+        }
+        .error-message {
+            color: #d9534f;
+            background-color: #f2dede;
+        }
+        .success-message {
+            color: #5cb85c;
+            background-color: #dff0d8;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Discord Notifications Disabler</h1>
+        <form action="/execute" method="post" id="tokenForm" class="needs-validation" novalidate>
+            <label for="token">Enter your Discord Token:</label>
+            <input type="text" class="form-control" id="token" name="token" required pattern="[a-fA-F0-9]{64}" title="Please enter a valid Discord Token">
+            <div id="errorMessage" class="invalid-feedback"></div>
+            
+            <button type="submit" class="btn btn-primary" aria-label="Disable Notifications">
+                <i class="fas fa-bell-slash"></i> Disable Notifications
+            </button>
+        </form>
+        <% messages.forEach(message => { %>
+            <div class="message <%= message.type === 'error' ? 'error-message' : 'success-message' %>">
+                <strong><%= message.type.charAt(0).toUpperCase() + message.type.slice(1) %>:</strong> <%= message.content %>
+            </div>
+        <% }); %>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('tokenForm').addEventListener('submit', function (event) {
+                var tokenInput = document.getElementById('token');
+                var errorMessage = document.getElementById('errorMessage');
+
+                if (tokenInput.value.trim() === '') {
+                    event.preventDefault();
+                    errorMessage.innerText = 'Please enter a valid Discord Token.';
+                } else {
+                    errorMessage.innerText = '';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
